@@ -6,118 +6,86 @@ class Book:
         self.year = year
         self.genre = genre
 
-    def getAuthor(self):
-        return self.author
-
-    def getGenre(self):
-        return self.genre
-
-    def getTitle(self):
+    def get_title(self):
         return self.title
 
+    def get_author(self):
+        return self.author
+
+    def get_publisher(self):
+        return self.publisher
+
+    def get_year(self):
+        return self.year
+
+    def get_genre(self):
+        return self.genre
+
     def __str__(self):
-        return f"Book: {self.title} by {self.author}, published by {self.publisher} ({self.year}), genre: {self.genre}"
+        return f"Title: {self.title}, Author: {self.author}, Publisher: {self.publisher}, Year: {self.year}, Genre: {self.genre}"
 
 
 class PaperBook(Book):
-    def __init__(self, title, publisher, author, year, genre, pageCount, weight, price):
+    def __init__(self, title, author, publisher, year, genre, pageCount, weight, isbn):
         super().__init__(title, author, publisher, year, genre)
-        self.pageCount = pageCount
+        self.page_count = pageCount
         self.weight = weight
-        self.price = price
+        self.isbn = isbn
 
     def __str__(self):
-        return f"PaperBook: {super().__str__()}, pageCount: {self.pageCount}, weight: {self.weight}, price: {self.price}"
+        return f"Title: {self.title}, Author: {self.author}, Publisher: {self.publisher}, Year: {self.year}, Genre: {self.genre}, Page Count: {self.page_count}, Weight: {self.weight}, ISBN: {self.isbn}"
 
 
 class ElectronicBook(Book):
-    def __init__(self, title, publisher, author, year, genre, format, fileSize):
+    def __init__(self, title, author, publisher, year, genre, format, fileSize):
         super().__init__(title, author, publisher, year, genre)
         self.format = format
-        self.fileSize = fileSize
+        self.file_size = fileSize
 
     def __str__(self):
-        return f"ElectronicBook: {super().__str__()}, format: {self.format}, fileSize: {self.fileSize}"
-class BookNotFoundException(Exception):
-    pass
+        return f"Title: {self.title}, Author: {self.author}, Publisher: {self.publisher}, Year: {self.year}, Genre: {self.genre}, Format: {self.format}, File Size: {self.file_size}"
 
-import logging
-
-def logged(exception, mode):
-    logger = logging.getLogger("book_manager_logger")
-    logger.setLevel(logging.INFO)
-
-    if mode == "console":
-        handler = logging.StreamHandler()
-    elif mode == "file":
-        handler = logging.FileHandler("book_manager.log")
-
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except exception as e:
-                logger.exception(e)
-        return wrapper
-    return decorator
 
 class BookManager:
     def __init__(self):
         self.books = []
 
-    def addBook(self, book):
+    def add_book(self, book):
         self.books.append(book)
 
-    @logged(BookNotFoundException, "console")
-    def searchByAuthor(self, author):
+    def search_by_author(self, author):
         result = []
         for book in self.books:
-            if book.getAuthor() == author:
+            if book.get_author() == author:
                 result.append(book)
-        if len(result) == 0:
-            raise BookNotFoundException(f"No books found by author: {author}")
         return result
 
-    @logged(BookNotFoundException, "file")
-    
-    def searchByGenre(self, genre):
-        """ 
-        ПЕРЕВІРКА НА ВИЙНЯТКИ.
-        """
-
-        print(self.searchByGenre.__doc__)
-        pass
+    def search_by_genre(self, genre):
         result = []
         for book in self.books:
-            if book.getGenre() == genre:
+            if book.get_genre() == genre:
                 result.append(book)
-        if len(result) == 0:
-            raise BookNotFoundException(f"No books found in genre: {genre}")
         return result
 
 
 books = []
-books.append(PaperBook("Harry Potter", "Lviv tratata", "T.Tupytsia", 2036, "Romantic", 349, 150, 228))
-books.append(ElectronicBook("Harry Potter", "Lviv tratata", "T.Tupytsia", 2036, "Romantic", "PDF", 1024 * 1024))
+books.append(PaperBook("Harry Poter", "Lviv tratata", "T.Tupytsia", 2036, "Romantic", 349, 150, 228))
+books.append(ElectronicBook("Harry Poter", "Lviv tratata", "T.Tupytsia", 2036, "Romantic", "PDF", 1024 * 1024))
 
 for book in books:
     print(book)
 
-bookManager = BookManager()
+book_manager = BookManager()
 book1 = Book("Harry Potter", "J.K. Rowling", "Bloomsbury Publishing", 1997, "Fantasy")
 book2 = Book("The Lord of the Rings", "J.R.R. Tolkien", "George Allen & Unwin", 1954, "Fantasy")
-bookManager.addBook(book1)
-bookManager.addBook(book2)
-booksByAuthor = bookManager.searchByAuthor("J.K. Rowling")
-booksByGenre = bookManager.searchByGenre("Fantasy")
+book_manager.add_book(book1)
+book_manager.add_book(book2)
 
-for book in booksByAuthor:
-    print(f"{book.getTitle()} by {book.getAuthor()}")
+books_by_author = book_manager.search_by_author("J.K. Rowling")
+books_by_genre = book_manager.search_by_genre("Fantasy")
 
-for book in booksByGenre:
-    print(f"{book.getTitle()} is a {book.getGenre()} book")
+for book in books_by_author:
+    print(book.get_title(), "by", book.get_author())
+
+for book in books_by_genre:
+    print(book.get_title(), "is a", book.get_genre(), "book")
