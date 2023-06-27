@@ -1,0 +1,14 @@
+2023-06-06 07:52:31,812 - ERROR - No books found in genre: Fantasy
+Traceback (most recent call last):
+  File "d:\python\iot\lviv\managers\BookManager.py", line 63, in wrapper
+    return func(*args, **kwargs)
+  File "d:\python\iot\lviv\managers\BookManager.py", line 93, in searchByGenre
+    raise BookNotFoundException(f"No books found in genre: {genre}")
+BookNotFoundException: No books found in genre: Fantasy
+2023-06-06 11:09:10,801 - ERROR - No books found in genre: Fa
+Traceback (most recent call last):
+  File "d:\python\iot\lviv\managers\BookManager.py", line 63, in wrapper
+    return func(*args, **kwargs)
+  File "d:\python\iot\lviv\managers\BookManager.py", line 93, in searchByGenre
+    raise BookNotFoundException(f"No books found in genre: {genre}")
+BookNotFoundException: No books found in genre: Fa
